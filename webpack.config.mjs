@@ -3,6 +3,9 @@ import util from 'util';
 import fs from 'fs';
 import HtmlPlugin from 'html-webpack-plugin';
 import HtmlWebpackIncludeAssetsPlugin from 'html-webpack-include-assets-plugin';
+import WebpackBundleAnalyzer from 'webpack-bundle-analyzer';
+
+const { BundleAnalyzerPlugin } = WebpackBundleAnalyzer;
 
 const { resolve } = path;
 const { promisify } = util;
@@ -11,7 +14,7 @@ const { readFile: readFileCb } = fs;
 const readFile = promisify(readFileCb);
 const logValue = v => (console.dir(v, { depth: 15 }), v);
 
-export default async function() {
+export default async function({ useBundleAnalyzer } = {}) {
   const babelConfig = JSON.parse(await readFile('./.babelrc'));
   return {
     entry: {
@@ -20,15 +23,47 @@ export default async function() {
     mode: 'development',
     devtool: 'sourcemap',
     output: {
-      path: resolve('./dist')
+      path: resolve('./dist'),
+      globalObject: 'self'
     },
     resolveLoader: {
       modules: [resolve('./webpack'), 'node_modules']
     },
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        name: true,
+        cacheGroups: {
+          main: {
+            test: /Main\.elm/
+          },
+          datastore: {
+            test: /Calc\.elm/
+          }
+        }
+      }
+    },
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.elm$/,
+          exclude: [/elm-stuff/, /node_modules/],
+          loader: 'elm-webpack-loader',
+          options: {
+            pathToMake: './node_modules/.bin/elm-make',
+            verbose: true,
+            warn: true,
+            debug: true
+          }
+        },
+        {
+          test: /\.js/,
+          rules: [
+            {
+              resourceQuery: /worker/,
+              use: ['worker-loader']
+            }
+          ],
           use: [
             {
               loader: 'babel-loader',
@@ -47,10 +82,14 @@ export default async function() {
     },
     plugins: [
       new HtmlPlugin(),
-      new HtmlWebpackIncludeAssetsPlugin({
-        assets: ['./dist/elm.js'],
-        append: true
-      })
-    ]
+      useBundleAnalyzer && new BundleAnalyzerPlugin()
+      // new HtmlWebpackIncludeAssetsPlugin({
+      //   // assets: ['./dist/elm.js'],
+      //   append: true
+      // })
+    ].filter(a => a),
+    externals: {
+      'elm-app': 'elm.js'
+    }
   };
 }

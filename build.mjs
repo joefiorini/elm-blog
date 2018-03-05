@@ -6,25 +6,27 @@ import makeConfig from './webpack.config.mjs';
 import util from 'util';
 
 async function run() {
-  const config = await makeConfig();
-
   if (process.argv[2] === 'build') {
+    const config = await makeConfig();
     const stats = await build(config);
     console.log(stats.toString({ colors: true }));
   } else if (process.argv[2] === 'serve') {
-    console.dir(config);
+    const config = await makeConfig({ useBundleAnalyzer: true });
+
     serve({
       config,
       options: {
         http2: true,
-        hot: true
+        hot: {
+          reload: true
+        }
       }
     });
   }
 }
 
 function build(config) {
-  const compiler = webpack(config());
+  const compiler = webpack(config);
 
   return util.promisify(compiler.run.bind(compiler))();
 }
