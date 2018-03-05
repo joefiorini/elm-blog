@@ -1,7 +1,7 @@
 async function run() {
-  const {
-    Calc
-  } = await import(/* webpackChunkName: "datastore", webpackMode: "lazy" */ './Calc.elm');
+  const { Calc } = await import(/* webpackChunkName: "datastore" */
+  /* webpackMode: "lazy" */
+  './Calc.elm');
 
   const worker = Calc.worker();
   // const worker = self.Elm.Calc.worker();

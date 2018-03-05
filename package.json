@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "./build.mjs serve",
-    "build": "./build.mjs build"
+    "build": "./build.mjs build",
+    "build:prod": "./build.mjs build production"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.40",

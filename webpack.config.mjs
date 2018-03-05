@@ -14,22 +14,27 @@ const { readFile: readFileCb } = fs;
 const readFile = promisify(readFileCb);
 const logValue = v => (console.dir(v, { depth: 15 }), v);
 
-export default async function({ useBundleAnalyzer } = {}) {
+export default async function({
+  useBundleAnalyzer,
+  isProduction = false
+} = {}) {
   const babelConfig = JSON.parse(await readFile('./.babelrc'));
   return {
     entry: {
       blog: ['./src/main.js']
     },
-    mode: 'development',
+    mode: isProduction ? 'production' : 'development',
     devtool: 'sourcemap',
     output: {
       path: resolve('./dist'),
-      globalObject: 'self'
+      globalObject: 'self',
+      chunkFilename: '[name]'
     },
     resolveLoader: {
       modules: [resolve('./webpack'), 'node_modules']
     },
     optimization: {
+      occurrenceOrder: true,
       splitChunks: {
         chunks: 'all',
         name: true,

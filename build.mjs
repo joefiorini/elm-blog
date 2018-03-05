@@ -7,7 +7,9 @@ import util from 'util';
 
 async function run() {
   if (process.argv[2] === 'build') {
-    const config = await makeConfig();
+    const config = await makeConfig({
+      isProduction: process.argv[3] === 'production'
+    });
     const stats = await build(config);
     console.log(stats.toString({ colors: true }));
   } else if (process.argv[2] === 'serve') {
