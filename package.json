@@ -1,0 +1,26 @@
+{
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.40",
+    "@babel/plugin-proposal-export-namespace": "^7.0.0-beta.32",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.40",
+    "@babel/polyfill": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
+    "@babel/register": "^7.0.0-beta.40",
+    "babel-loader": "^8.0.0-beta.0",
+    "elm": "^0.18.0",
+    "elm-format": "^0.6.1-alpha",
+    "html-webpack-include-assets-plugin": "^1.0.3",
+    "html-webpack-plugin": "^3.0.4",
+    "loader-utils": "^1.1.0",
+    "markdown-loader": "^2.0.2",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10",
+    "webpack-serve": "^0.1.5",
+    "yaml-front-matter": "^4.0.0-4"
+  },
+  "dependencies": {
+    "js-sha256": "^0.9.0",
+    "localforage": "^1.6.0"
+  }
+}

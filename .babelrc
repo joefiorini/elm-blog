@@ -1,0 +1,21 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": ["last 2 years"]
+        },
+        "modules": false,
+        "debug": false,
+        "useBuiltIns": "entry",
+        "shippedProposals": true
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-export-namespace",
+    "@babel/plugin-proposal-export-default-from",
+    "@babel/plugin-syntax-dynamic-import"
+  ]
+}
